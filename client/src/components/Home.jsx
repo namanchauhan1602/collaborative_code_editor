@@ -5,14 +5,18 @@ function Home() {
     <>
       <div className='flex justify-center items-center p-4 h-screen'>
         <div className='flex flex-col border-white p-14 min-w-[700px] border-4 rounded-lg bg-gray-950'>
+
+
           {/* image and logo section */}
           <div className='flex justify-center gap-6 items-center w-full'>
-            <img className='rounded-full w-[80px] h-[80px]' src="https://encrypted-tbn0.gstatic.com/
+            <img className='rounded-full w-[15%] h-[15%]' src="https://encrypted-tbn0.gstatic.com/
               images?q=tbn:ANd9GcQ9RdrLRdPpAGt2MZ08BUa6Jprv7KSisVarb_myM7wN5
               -UrmjIdgsj7WBK8SqBzTCcXrOw&usqp=CAU" alt="" />
             <div className=' min-h-[80px] border-white border-l-2'></div>
             <h1 className='text-white text-4xl'>CodeShow</h1>
           </div>
+
+          
           {/* form section */}
           <div className='flex flex-col items-center mt-16'>
             <p className='text-white mb-8 text-2xl text-center'>Enter the room ID</p>
