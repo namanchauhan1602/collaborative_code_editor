@@ -1,20 +1,65 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Client from './Client'
 import EditorPortal from './EditorPortal'
+import { initSocket } from '../socket/socket'
+import { useLocation, useParams, useNavigate, Navigate } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
+
+
 
 function Editor() {
+  const [clients, setClients] = useState([])
+  const socketRef = useRef(null)
+  const location = useLocation()
+  const { roomId } = useParams()
+  const navigate = useNavigate()
 
-  const [clients, setClients] = useState([
-    { socketId: 1, username: 'naman' },
-    { socketId: 2, username: 'gaman' },
-    { socketId: 3, username: 'haman' },
-    { socketId: 4, username: 'oaman' }
-  ])
+  useEffect(() => {
+    const init = async () => {
+      socketRef.current = await initSocket()
+      socketRef.current.on('connect_error', (err) => handleErrors(err))
+      socketRef.current.on('connect_failed', (err) => handleErrors(err))
+
+      const handleErrors = (err) => {
+        console.log('Socket connection error', err)
+        toast.error('Socket connection error')
+        navigate('/')
+      }
+      socketRef.current.emit('join', {
+        roomId: roomId,
+        username: location.state?.username
+      })
+      // emitting other users if new user joins the room
+      socketRef.current.on('new-user-joined', ({ clients, username, socketId }) => {
+        if (username !== location.state?.username) {
+          toast.success(`${username} joined the room`)
+        }
+        setClients(clients)
+        socketRef.current.emit('sync-code', {code}) 
+      })
+
+      // disconnecting the user
+      socketRef.current.on('disconnected', ({ socketId, username }) => {
+        toast(`${username} left the room`)
+        setClients((prevClients) => prevClients.filter((client) => client.socketId !== socketId))
+      })
+    }
+    init()
+    return () => {
+      socketRef.current.disconnect()
+      socketRef.current.off('joined')
+      socketRef.current.off('disconnected')
+    }
+  }, [])
+
+  if (!location.state) {
+    return <Navigate to='/' />
+  }
 
   return (
     <div className='flex gap-6 h-screen'>
       {/* left side div to show session members */}
-      <div className='flex flex-col max-w-[20%] bg-gray-950 pt-8'>
+      <div className='flex flex-col min-w-[20%] max-w-[20%] bg-gray-950 pt-8'>
 
 
         {/* logo and app name part */}
@@ -54,8 +99,8 @@ function Editor() {
 
 
       {/* right side div where the codemirror screen will come */}
-      <div className='flex-1 m-5 border-white border-2'>
-        <EditorPortal />
+      <div className='flex-1 m-5'>
+        <EditorPortal socketRef = {socketRef} roomId = {roomId}/>
       </div>
     </div>
   )

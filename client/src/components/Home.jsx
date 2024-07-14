@@ -1,6 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { nanoid } from 'nanoid'
+import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 function Home() {
+  const [roomID, setRoomID] = useState('')
+  const [username, setUsername] = useState('')
+  const navigater = useNavigate()
+
+  const createNewRoom = (e) => {
+    e.preventDefault()
+    const id = nanoid(16)
+    setRoomID(id)
+    toast.success('New RoomID Generated')
+  }
+  
+  const joinRoom = () => {
+    if (roomID === '' || username === '') {
+      toast.error('Please fill all the fields')
+      return
+    }
+    navigater(`/editor/${roomID}`, {
+      state: { username: username }
+    })
+    toast.success('New Room Created')
+  }
+
   return (
     <>
       <div className='flex justify-center items-center p-4 h-screen'>
@@ -16,18 +41,29 @@ function Home() {
             <h1 className='text-white text-4xl'>CodeShow</h1>
           </div>
 
-          
+
           {/* form section */}
           <div className='flex flex-col items-center mt-16'>
             <p className='text-white mb-8 text-2xl text-center'>Enter the room ID</p>
             <form className='w-[60%] flex flex-col gap-4' action="">
-              <input className='p-3 rounded-3xl' type="text" name="" id="" placeholder='Room ID' />
-              <input className='p-3 rounded-3xl' type="text" name="" id="" placeholder='Username' />
+              <input className='p-3 rounded-3xl outline-none'
+                type="text" name="" id="" placeholder='Room ID' value={roomID}
+                onChange={(e) => setRoomID(e.target.value)}
+              />
+              <input className='p-3 rounded-3xl outline-none'
+                type="text" name="" id="" placeholder='Username'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
               <button type='submit' className='rounded-3xl p-4
                bg-gray-600 max-w-24 
-               hover:bg-gray-900 hover:text-white'>Join</button>
+               hover:bg-gray-900 hover:text-white font-semibold'
+                onClick={joinRoom}
+              >Join</button>
             </form>
-            <p className='text-white mt-4'>Don't have a Room ID? Create <span className='text-green-500 hover:text-green-800 cursor-pointer'>New Room</span> .</p>
+            <p className='text-white mt-4'>Don't have a Room ID? Create <span className='text-green-500 hover:text-green-800 cursor-pointer'
+              onClick={createNewRoom}
+            >New Room</span>.</p>
           </div>
         </div>
       </div>
