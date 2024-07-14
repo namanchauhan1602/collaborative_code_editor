@@ -14,7 +14,7 @@ function Editor() {
   return (
     <div className='flex gap-6 h-screen'>
       {/* left side div to show session members */}
-      <div className='flex flex-col w-[25%] bg-gray-950 pt-8'>
+      <div className='flex flex-col max-w-[20%] bg-gray-950 pt-8'>
 
 
         {/* logo and app name part */}
@@ -39,7 +39,8 @@ function Editor() {
             }
           </div>
         </div>
-        <div className='w-[80%] ml-[10%] border-white border-b-[1px] mt-8'></div>
+        <div className='w-[75%] ml-[10%] border-white border-b-[1px] mt-8'>
+        </div>
 
 
         {/* bottom buttons part */}
@@ -53,7 +54,7 @@ function Editor() {
 
 
       {/* right side div where the codemirror screen will come */}
-      <div className='w-full p-5'>
+      <div className='flex-1 m-5 border-white border-2'>
         <EditorPortal />
       </div>
     </div>
