@@ -35,7 +35,6 @@ function Editor() {
           toast.success(`${username} joined the room`)
         }
         setClients(clients)
-        socketRef.current.emit('sync-code', {code}) 
       })
 
       // disconnecting the user
@@ -51,6 +50,20 @@ function Editor() {
       socketRef.current.off('disconnected')
     }
   }, [])
+
+  const copyRoomId = async () => {
+    try {
+      await navigator.clipboard.writeText(roomId);
+      toast.success(`roomIs is copied`);
+    } catch (error) {
+      console.log(error);
+      toast.error("unable to copy the room Id");
+    }
+  }
+
+  const leaveRoom = async () => {
+    navigate("/");
+  }
 
   if (!location.state) {
     return <Navigate to='/' />
@@ -91,8 +104,10 @@ function Editor() {
         {/* bottom buttons part */}
         <div className='w-full mb-8 pt-10'>
           <div className='flex justify-around '>
-            <button className='bg-green-600 p-4 rounded-full hover:bg-green-900 hover:text-white'>Copy Room ID</button>
-            <button className='bg-red-500 p-4 rounded-full hover:bg-red-900 hover:text-white'>Leave Room</button>
+            <button className='bg-green-600 p-4 rounded-full hover:bg-green-900 hover:text-white'
+            onClick={copyRoomId}>Copy Room ID</button>
+            <button className='bg-red-500 p-4 rounded-full hover:bg-red-900 hover:text-white'
+            onClick={leaveRoom}>Leave Room</button>
           </div>
         </div>
       </div>
@@ -100,7 +115,9 @@ function Editor() {
 
       {/* right side div where the codemirror screen will come */}
       <div className='flex-1 m-5'>
-        <EditorPortal socketRef = {socketRef} roomId = {roomId}/>
+        <EditorPortal
+          socketRef={socketRef}
+          roomId={roomId} />
       </div>
     </div>
   )

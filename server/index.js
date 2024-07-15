@@ -33,8 +33,9 @@ io.on('connection', (socket) => {
     });
 
     socket.on('code-change', ({ roomId, code }) => {
-        socket.in(roomId).emit('code-change', {code});
+        socket.in(roomId).emit('code-change', {code})
     })
+
 
     socket.on('disconnecting', () => {
         const rooms = [...socket.rooms]
