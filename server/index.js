@@ -1,6 +1,12 @@
 import express from "express";
 import { createServer } from "http";
+import path from "path";
 import { Server } from "socket.io";
+
+app.use(express.static(path.join(__dirname, "../client/dist")))
+app.get('*', (req, res)=>{
+    res.sendFile(path.join(__dirname, "../client/dist/index.html"))
+})
 
 const app = express();
 const PORT = 3000;
@@ -49,10 +55,6 @@ io.on("connection", (socket) => {
     delete userSocketMap[socket.id];
     socket.leave();
   });
-});
-
-app.get("/", (req, res) => {
-  res.send("hello world");
 });
 
 server.listen(PORT, () => {
