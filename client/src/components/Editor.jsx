@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import  { useEffect, useRef, useState } from 'react'
 import Client from './Client'
 import EditorPortal from './EditorPortal'
 import { initSocket } from '../socket/socket'
@@ -29,7 +29,7 @@ function Editor() {
         username: location.state?.username
       })
       // emitting other users if new user joins the room
-      socketRef.current.on('new-user-joined', ({ clients, username, socketId }) => {
+      socketRef.current.on('new-user-joined', ({ clients, username }) => {
         if (username !== location.state?.username) {
           toast.success(`${username} joined the room`)
         }
