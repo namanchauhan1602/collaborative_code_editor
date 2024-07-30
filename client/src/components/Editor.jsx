@@ -4,8 +4,7 @@ import EditorPortal from './EditorPortal'
 import { initSocket } from '../socket/socket'
 import { useLocation, useParams, useNavigate, Navigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
-
-
+import  '../styles/editor.css'
 
 function Editor() {
   const [clients, setClients] = useState([])
@@ -87,7 +86,7 @@ function Editor() {
 
 
         {/* middle part for session members */}
-        <div className='flex-1 pl-6 mt-4 max-w-full'>
+        <div className='mid-sec flex-1 pl-6 mt-4 max-w-full overflow-auto'>
           <p className='text-white'>Members</p>
           <div className='flex flex-wrap gap-8 mt-6'>
             {
