@@ -7,5 +7,5 @@ export const initSocket = async () => {
         reconnection: 'infinity',
         timeout: 10000,
     }
-    return io('http://localhost:3000/', options);
+    return io('collaborative-code-editor-hzc5bngvz-namans-projects-092efb07.vercel.app/', options);
 }
