@@ -9,7 +9,9 @@ const server = createServer(app);
 const io = new Server(server);
 const userSocketMap = {};
 
-app.use(cors());
+app.use(cors({
+   origin : ['https://collaborative-code-editor-three.vercel.app/'],
+}));
 
 const getAllConnectedClients = (roomId) => {
   return Array.from(io.sockets.adapter.rooms.get(roomId) || []).map(
